@@ -31,7 +31,7 @@ namespace TOTVS.Controllers
             var mockProdutosPedido = _context.ProdutosDoPedidos
                 .Include(p => p.Produto)
                 .FirstOrDefault(c => c.ID == 1);
-            compraVM.ListaProdutosDoPedido.Add(mockProdutosPedido);
+            //compraVM.ListaProdutosDoPedido.Add(mockProdutosPedido);
 
             compraVM.ListaProdutos = _context.Produtos.ToList();
             //pedido = _context.Pedidos.Select(x => x.ID == id);
