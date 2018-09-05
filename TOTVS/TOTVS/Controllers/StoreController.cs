@@ -1,25 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using TOTVS.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using TOTVS.Data;
 
 namespace TOTVS.Controllers
 {
     public class StoreController : Controller
     {
+        private readonly TOTVSContext _context;
+
+        public StoreController(TOTVSContext context)
+        {
+            _context = context;
+        }
+
         public ActionResult Index()
         {
-            var genres = new List<Genre>
-            {
-                new Genre { Name = "Disco"},
-                new Genre { Name = "Jazz"},
-                new Genre { Name = "Rock"}
-            };
+            var genres = _context.Genres.ToList();
             return View(genres);
         }
 
         public ActionResult Browse(string genre)
         {
-            // Retrieve Genre and its Associated Albums from database
             var genreModel = _context.Genres.Include("Albums")
                 .Single(g => g.Name == genre);
 
@@ -28,7 +30,8 @@ namespace TOTVS.Controllers
 
         public ActionResult Details(int id)
         {
-            var album = new Album { Title = "Album " + id };
+            var album = _context.Albums.Find(id);
+
             return View(album);
         }
     }
