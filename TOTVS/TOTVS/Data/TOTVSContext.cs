@@ -9,15 +9,15 @@ namespace TOTVS.Data
         {
         }
 
-        public DbSet<Pedido> Pedidos { get; set; }
-        public DbSet<Produto> Produtos { get; set; }
-        public DbSet<ProdutosDoPedido> ProdutosDoPedidos { get; set; }
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        //public DbSet<ProdutosDoPedido> ProdutosDoPedidos { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Pedido>().ToTable("Pedidos");
             modelBuilder.Entity<Produto>().ToTable("Produtos");
             modelBuilder.Entity<ProdutosDoPedido>().ToTable("ProdutosDoPedidos");
-        }
+        }*/
     }
 }

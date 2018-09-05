@@ -12,21 +12,22 @@ namespace TOTVS.Data
                 context.Database.EnsureCreated();
 
                 // Look for any students.
-                if (context.Produtos.Any())
+                if (context.Genres.Any())
                 {
                     return;   // DB has been seeded
                 }
 
-                var produtos = new Produto[]
+                var genre = new Genre[]
                 {
-            new Produto{Descricao="Uno",ValorIndividual=15},
-            new Produto{Descricao="Coelho",ValorIndividual=20},
-            new Produto{Descricao="Celular",ValorIndividual=55},
-            new Produto{Descricao="Paciencia",ValorIndividual=13}
+             new Genre{Name="Rock",Description="Rock descricao"},
+             new Genre{Name="Jazz",Description="Jazz descricao"},
+             new Genre{Name="Heavy Metal",Description="Heavy Metal descricao"},
+             new Genre{Name="Blues",Description="Blues descricao"},
+             new Genre{Name="Classica",Description="Classica descricao"}
                 };
-                foreach (Produto p in produtos)
+                foreach (Genre p in genre)
                 {
-                    context.Produtos.Add(p);
+                    context.Genres.Add(p);
                 }
                 context.SaveChanges();
 
