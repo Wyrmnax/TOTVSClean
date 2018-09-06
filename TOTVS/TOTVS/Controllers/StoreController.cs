@@ -30,7 +30,11 @@ namespace TOTVS.Controllers
 
         public ActionResult Details(int id)
         {
-            var album = _context.Albums.Find(id);
+            var album = _context.Albums
+                .Include(x => x.Genre)
+                .Include(x => x.Artist)
+                .Where(x => x.AlbumId == id)
+                .SingleOrDefault();
 
             return View(album);
         }

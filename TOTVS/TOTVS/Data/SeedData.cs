@@ -74,8 +74,6 @@ namespace TOTVS.Data
                     context.Albums.Add(p);
                 }
                 context.SaveChanges();
-
-                context.SaveChanges();
             }
         }
     }
