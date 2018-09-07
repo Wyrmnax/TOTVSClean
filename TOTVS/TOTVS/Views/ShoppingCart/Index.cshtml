@@ -3,33 +3,8 @@
     ViewBag.Title = "Shopping Cart";
 }
 
-<script type="text/javascript">
-    $(function () {
-        // Document.ready -> link up remove event handler
-        $(".RemoveLink").click(function () {
-            // Get the id from the link
-            var recordToDelete = $(this).attr("data-id");
-            if (recordToDelete != '') {
-                // Perform the ajax post
-                $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
-                    function (data) {
-                        // Successful requests get here
-                        // Update the page elements
-                        if (data.ItemCount == 0) {
-                            $('#row-' + data.DeleteId).fadeOut('slow');
-                        } else {
-                            $('#item-count-' + data.DeleteId).text(data.ItemCount);
-                        }
-                        $('#cart-total').text(data.CartTotal);
-                        $('#update-message').text(data.Message);
-                        $('#cart-status').text('Cart (' + data.CartCount + ')');
-                    });
-            }
-        });
-    });
-</script>
 <h3>
-    <em>Review</em> your cart:
+    <em>Verifique</em> seu carrinho:
 </h3>
 <p class="button">
     @Html.ActionLink("Checkout>>", "AddressAndPayment", "Checkout")
@@ -64,11 +39,7 @@ Model.CartItems)
                 @item.Count
             </td>
             <td>
-                <a href="#" class="RemoveLink"
-                   data-id="@item.RecordId">
-                    Remove
-                    from cart
-                </a>
+                @Html.ActionLink("Remover do carrinho", "RemoveFromCart", "ShoppingCart", @item.RecordId, "")
             </td>
         </tr>
     }

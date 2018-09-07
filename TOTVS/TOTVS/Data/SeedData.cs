@@ -74,6 +74,18 @@ namespace TOTVS.Data
                     context.Albums.Add(p);
                 }
                 context.SaveChanges();
+
+                var users = new User[]
+                {
+                    new User{Nome="Remo",CPF="22679930827"},
+                    new User{Nome="Nome",CPF="65478743455"},
+                    new User{Nome="Nome2",CPF="234565756788"}
+                };
+                foreach (User p in users)
+                {
+                    context.Users.Add(p);
+                }
+                context.SaveChanges();
             }
         }
     }

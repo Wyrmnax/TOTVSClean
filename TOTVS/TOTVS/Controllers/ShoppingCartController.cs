@@ -17,11 +17,13 @@ namespace TOTVS.Controllers
             _context = context;
         }
 
+        private string userID = "1";   //hardcoded for now - need to change to the selected user
+
         //
         // GET: /ShoppingCart/
         public ActionResult Index(string cartId)
         {
-            var cart = _context.Carts.Include(x => x.Album).Where(x => x.CartId == cartId).ToList();
+            var cart = _context.Carts.Include(x => x.Album).Where(x => x.CartId == userID).ToList();
 
             // Set up our ViewModel
             var viewModel = new ShoppingCartViewModel
@@ -41,16 +43,24 @@ namespace TOTVS.Controllers
             var addedAlbum = _context.Albums
                 .Single(album => album.AlbumId == id);
 
-            var aaaa = this.ControllerContext.ToString();
-            var bbbb = _context.Carts.FirstOrDefault();
-
+            var currentCart = _context.Carts.Where(x => x.AlbumId == addedAlbum.AlbumId).Where(x => x.CartId == userID).FirstOrDefault();
             var cart = new Cart() { };
-            cart.AlbumId = id;
-            cart.Album = addedAlbum;
-            cart.DateCreated = DateTime.Now;
-            cart.Count = cart.Count++;
 
-            _context.Carts.Add(cart);
+            if (currentCart == null) //new cart
+            {
+                cart.CartId = userID;
+                cart.AlbumId = id;
+                cart.Album = addedAlbum;
+                cart.DateCreated = DateTime.Now;
+                cart.Count = cart.Count + 1;
+
+                _context.Carts.Add(cart);
+            }
+            else
+            {
+                currentCart.Count = currentCart.Count + 1;
+                _context.Update(currentCart);
+            }
 
             _context.SaveChanges();
 
@@ -65,7 +75,6 @@ namespace TOTVS.Controllers
 
         //
         // AJAX: /ShoppingCart/RemoveFromCart/5
-        [HttpPost]
         public ActionResult RemoveFromCart(int id)
         {
             // Remove the item from the cart
