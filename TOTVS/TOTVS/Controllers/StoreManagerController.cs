@@ -10,22 +10,23 @@ using TOTVS.Models;
 
 namespace TOTVS.Controllers
 {
-    public class ProdutosController : Controller
+    public class StoreManagerController : Controller
     {
         private readonly TOTVSContext _context;
 
-        public ProdutosController(TOTVSContext context)
+        public StoreManagerController(TOTVSContext context)
         {
             _context = context;
         }
 
-        // GET: Produtos
+        // GET: StoreManager
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Produtos.ToListAsync());
+            var tOTVSContext = _context.Albums.Include(a => a.Artist).Include(a => a.Genre);
+            return View(await tOTVSContext.ToListAsync());
         }
 
-        // GET: Produtos/Details/5
+        // GET: StoreManager/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,45 @@ namespace TOTVS.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Produtos
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (produto == null)
+            var album = await _context.Albums
+                .Include(a => a.Artist)
+                .Include(a => a.Genre)
+                .FirstOrDefaultAsync(m => m.AlbumId == id);
+            if (album == null)
             {
                 return NotFound();
             }
 
-            return View(produto);
+            return View(album);
         }
 
-        // GET: Produtos/Create
+        // GET: StoreManager/Create
         public IActionResult Create()
         {
+            ViewData["ArtistId"] = new SelectList(_context.Artists, "ArtistId", "ArtistId");
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreId");
             return View();
         }
 
-        // POST: Produtos/Create
+        // POST: StoreManager/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Descricao,ValorIndividual")] Produto produto)
+        public async Task<IActionResult> Create([Bind("AlbumId,GenreId,ArtistId,Title,Price,AlbumArtUrl")] Album album)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(produto);
+                _context.Add(album);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(produto);
+            ViewData["ArtistId"] = new SelectList(_context.Artists, "ArtistId", "ArtistId", album.ArtistId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreId", album.GenreId);
+            return View(album);
         }
 
-        // GET: Produtos/Edit/5
+        // GET: StoreManager/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +80,24 @@ namespace TOTVS.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Produtos.FindAsync(id);
-            if (produto == null)
+            var album = await _context.Albums.FindAsync(id);
+            if (album == null)
             {
                 return NotFound();
             }
-            return View(produto);
+            ViewData["ArtistId"] = new SelectList(_context.Artists, "ArtistId", "ArtistId", album.ArtistId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreId", album.GenreId);
+            return View(album);
         }
 
-        // POST: Produtos/Edit/5
+        // POST: StoreManager/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Descricao,ValorIndividual")] Produto produto)
+        public async Task<IActionResult> Edit(int id, [Bind("AlbumId,GenreId,ArtistId,Title,Price,AlbumArtUrl")] Album album)
         {
-            if (id != produto.ID)
+            if (id != album.AlbumId)
             {
                 return NotFound();
             }
@@ -97,12 +106,12 @@ namespace TOTVS.Controllers
             {
                 try
                 {
-                    _context.Update(produto);
+                    _context.Update(album);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProdutoExists(produto.ID))
+                    if (!AlbumExists(album.AlbumId))
                     {
                         return NotFound();
                     }
@@ -113,10 +122,12 @@ namespace TOTVS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(produto);
+            ViewData["ArtistId"] = new SelectList(_context.Artists, "ArtistId", "ArtistId", album.ArtistId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenreId", "GenreId", album.GenreId);
+            return View(album);
         }
 
-        // GET: Produtos/Delete/5
+        // GET: StoreManager/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +135,32 @@ namespace TOTVS.Controllers
                 return NotFound();
             }
 
-            var produto = await _context.Produtos
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (produto == null)
+            var album = await _context.Albums
+                .Include(a => a.Artist)
+                .Include(a => a.Genre)
+                .FirstOrDefaultAsync(m => m.AlbumId == id);
+            if (album == null)
             {
                 return NotFound();
             }
 
-            return View(produto);
+            return View(album);
         }
 
-        // POST: Produtos/Delete/5
+        // POST: StoreManager/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var produto = await _context.Produtos.FindAsync(id);
-            _context.Produtos.Remove(produto);
+            var album = await _context.Albums.FindAsync(id);
+            _context.Albums.Remove(album);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProdutoExists(int id)
+        private bool AlbumExists(int id)
         {
-            return _context.Produtos.Any(e => e.ID == id);
+            return _context.Albums.Any(e => e.AlbumId == id);
         }
     }
 }
