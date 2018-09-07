@@ -80,24 +80,25 @@ namespace TOTVS.Controllers
             // Remove the item from the cart
             var cart = ShoppingCart.GetCart(_context);
 
+            var removedAlbum = _context.Albums
+                .FirstOrDefault(album => album.AlbumId == id);
+
             // Get the name of the album to display confirmation
-            string albumName = _context.Carts
-                .Single(item => item.RecordId == id).Album.Title;
+            var currentCart = _context.Carts.Where(x => x.AlbumId == removedAlbum.AlbumId).Where(x => x.CartId == userID).FirstOrDefault();
 
-            // Remove from cart
-            int itemCount = cart.RemoveFromCart(id);
-
-            // Display the confirmation message
-            var results = new ShoppingCartRemoveViewModel
+            if (currentCart.Count > 1)
             {
-                Message = _context.Albums.FirstOrDefault() +
-                    " Foi removido do seu carrinho.",
-                CartTotal = cart.GetTotal(),
-                CartCount = cart.GetCount(),
-                ItemCount = itemCount,
-                DeleteId = id
-            };
-            return Json(results);
+                currentCart.Count = currentCart.Count - 1;
+                _context.Update(currentCart);
+            }
+            else
+            {
+                _context.Remove(currentCart);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
         //

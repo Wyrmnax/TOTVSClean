@@ -30,7 +30,7 @@ Model.CartItems)
         <tr id="row-@item.RecordId">
             <td>
                 @Html.ActionLink(item.Album.Title,
-"Details", "Store", new { id = item.AlbumId }, null)
+    "Details", "Store", new { id = item.AlbumId }, null)
             </td>
             <td>
                 @item.Album.Price
@@ -39,7 +39,7 @@ Model.CartItems)
                 @item.Count
             </td>
             <td>
-                @Html.ActionLink("Remover do carrinho", "RemoveFromCart", "ShoppingCart", @item.RecordId, "")
+                @Html.ActionLink("Remover do carrinho", "RemoveFromCart", "ShoppingCart", new { id = item.AlbumId }, "")
             </td>
         </tr>
     }
