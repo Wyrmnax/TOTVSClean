@@ -77,7 +77,7 @@ namespace TOTVS.Data
 
                 var users = new User[]
                 {
-                    new User{Nome="Remo",CPF="22679930827"},
+                    new User{Nome="Default User",CPF="22679930827"},
                     new User{Nome="Nome",CPF="65478743455"},
                     new User{Nome="Nome2",CPF="234565756788"}
                 };

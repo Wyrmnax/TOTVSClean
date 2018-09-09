@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<TOTVS.Models.User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewBag.Title = "Usuarios";
 }
-
-<h2>Index</h2>
+<h3>Vendo Generos</h3>
+<p>
+    Escolha entre os Usuarios:
+</p>
+<ul>
+    @foreach (var user in Model)
+    {
+        <li>
+            @Html.ActionLink(user.Nome, "SelectUser", "SelectUsersController", user.UserID)
+        </li>
+    }
+</ul>

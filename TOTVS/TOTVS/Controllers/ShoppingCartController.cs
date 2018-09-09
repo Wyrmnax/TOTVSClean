@@ -100,15 +100,5 @@ namespace TOTVS.Controllers
 
             return RedirectToAction("Index");
         }
-
-        //
-        // GET: /ShoppingCart/CartSummary
-        public ActionResult CartSummary()
-        {
-            var cart = ShoppingCart.GetCart(_context);
-
-            ViewData["CartCount"] = cart.GetCount();
-            return PartialView("CartSummary");
-        }
     }
 }
