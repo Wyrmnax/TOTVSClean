@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<TOTVS.Models.Genre>
 @{
-    ViewBag.Title = "Store";
+    ViewBag.Title = "Loja";
 }
 <h3>Vendo Generos</h3>
 <p>
@@ -10,8 +10,7 @@
     @foreach (var genre in Model)
     {
         <li>
-            @Html.ActionLink(genre.Name,
-"Browse", new { genre = genre.Name })
+            @Html.ActionLink(genre.Name, "Browse", new { genre = genre.Name })
         </li>
     }
 </ul>
